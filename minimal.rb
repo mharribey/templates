@@ -8,6 +8,7 @@ source 'https://rubygems.org'
 ruby '#{RUBY_VERSION}'
 
 #{"gem 'bootsnap', require: false" if Rails.version >= "5.2"}
+gem 'webpacker'
 gem 'devise'
 gem 'figaro'
 gem 'jbuilder', '~> 2.0'
@@ -22,7 +23,6 @@ gem 'font-awesome-sass', '~> 4.7'
 gem 'sass-rails'
 gem 'simple_form'
 gem 'uglifier'
-gem 'webpacker'
 
 group :development do
   gem 'web-console', '>= 3.3.0'
@@ -233,7 +233,6 @@ RUBY
         jQuery: 'jquery'
       })
     )
-
     JS
   end
 
