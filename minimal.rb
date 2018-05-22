@@ -22,6 +22,7 @@ gem 'font-awesome-sass', '~> 4.7'
 gem 'sass-rails'
 gem 'simple_form'
 gem 'uglifier'
+gem 'webpacker', '~> 3.5.3'
 
 group :development do
   gem 'web-console', '>= 3.3.0'
@@ -220,12 +221,11 @@ RUBY
   # Webpacker / Yarn
   ########################################
   run 'rm app/javascript/packs/application.js'
-  run 'yarn add jquery bootstrap@4'
-  file 'app/javascript/packs/application.js'
+  run 'yarn add jquery bootstrap'
 
   inject_into_file 'config/webpack/environment.js', before: 'module.exports' do
     <<-JS
-    // Bootstrap 3 has a dependency over jQuery:
+    // Bootstrap has a dependency over jQuery:
     const webpack = require('webpack')
     environment.plugins.prepend('Provide',
       new webpack.ProvidePlugin({
@@ -233,6 +233,7 @@ RUBY
         jQuery: 'jquery'
       })
     )
+
     JS
   end
 
