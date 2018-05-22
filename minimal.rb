@@ -6,6 +6,7 @@ run 'rm Gemfile'
 file 'Gemfile', <<-RUBY
 source 'https://rubygems.org'
 ruby '#{RUBY_VERSION}'
+
 #{"gem 'bootsnap', require: false" if Rails.version >= "5.2"}
 gem 'devise'
 gem 'figaro'
@@ -21,9 +22,11 @@ gem 'font-awesome-sass', '~> 4.7'
 gem 'sass-rails'
 gem 'simple_form'
 gem 'uglifier'
+
 group :development do
   gem 'web-console', '>= 3.3.0'
 end
+
 group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
@@ -166,17 +169,17 @@ after_bundle do
   ########################################
   run 'rm .gitignore'
   file '.gitignore', <<-TXT
-.bundle
-log/*.log
-tmp/**/*
-tmp/*
-!log/.keep
-!tmp/.keep
-*.swp
-.DS_Store
-public/assets
-.byebug_history
-TXT
+  .bundle
+  log/*.log
+  tmp/**/*
+  tmp/*
+  !log/.keep
+  !tmp/.keep
+  *.swp
+  .DS_Store
+  public/assets
+  .byebug_history
+  TXT
 
   # Devise install + user
   ########################################
@@ -187,10 +190,10 @@ TXT
   ########################################
   run 'rm app/controllers/application_controller.rb'
   file 'app/controllers/application_controller.rb', <<-RUBY
-class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
-  # before_action :authenticate_user!
-end
+  class ApplicationController < ActionController::Base
+    protect_from_forgery with: :exception
+    # before_action :authenticate_user!
+  end
 RUBY
 
   # migrate + devise views
@@ -214,7 +217,25 @@ RUBY
   environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: 'development'
   environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
 
+  # Webpacker / Yarn
+  ########################################
+  run 'rm app/javascript/packs/application.js'
+  run 'yarn add jquery bootstrap@3'
+  file 'app/javascript/packs/application.js'
 
+  inject_into_file 'config/webpack/environment.js', before: 'module.exports' do
+    <<-JS
+    // Bootstrap 3 has a dependency over jQuery:
+    const webpack = require('webpack')
+    environment.plugins.prepend('Provide',
+      new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery'
+      })
+    )
+    JS
+  end
+  
   # Figaro
   ########################################
   run 'bundle binstubs figaro'
