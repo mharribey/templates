@@ -8,6 +8,7 @@ Get a minimal rails 5.2+ app ready to be deployed on Heroku with Bootstrap, Simp
 ```bash
 rails new \
   --database postgresql \
+  --webpack \
   -m https://raw.githubusercontent.com/mharribey/templates/master/minimal.rb \
   CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 ```
